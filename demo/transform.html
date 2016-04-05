@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+<img src="img/53.jpg" id="pic" alt="" />	
+
+<h2>等比缩放至100宽</h2>
+<div id="scaleShow"></div>
+
+<h2>裁剪</h2>
+<div id="clipShow"></div>
+
+<h2>旋转</h2>
+<div id="rotateShow"></div>
+
+<h2>水平翻转</h2>
+<div id="reflectShow0"></div>
+
+<h2>垂直翻转</h2>
+<div id="reflectShow"></div>
+
+<h2>仿射变换</h2>
+<div id="transform1"></div>
+<div id="transform2"></div>
+
+<script type="text/javascript" src="alloyimage/alloyimage.1.2.js"></script>
+<script type="text/javascript">
+window.onload = function(){
+  var pic = document.getElementById('pic');
+
+  $AI(pic).scaleTo(100).show('#scaleShow');
+  $AI(pic).clip(100, 100, 200, 200).show('#clipShow');
+  $AI(pic).rotate(30).show('#rotateShow');
+
+  $AI(pic).transform([-1, 0, 0, 1, 0, 0]).show("#reflectShow0");
+  //将图层垂直翻转
+  $AI(pic).transform([1, 0, 0, -1, 0, 0]).show("#reflectShow");
+
+
+
+  $AI(pic).transform([0.5, 1, -0.3, 1, 0, 0]).show("#transform1");
+
+  $AI(pic).transform([0.2, 1, 0.7, -1, 0, 0]).show("#transform2");
+  
+};
+</script>
+</body>
+</html>

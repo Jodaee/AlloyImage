@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+
+<button id='download'>下载</button>
+<script type="text/javascript" src="alloyimage/alloyimage.1.2.js"></script>	
+<script type="text/javascript">
+var img = new Image();
+img.src = "img/11.jpg";
+img.onload = function(){
+  var red = $AI(this);
+
+  //red.act("可选颜色", "青色", -0.53, -0.86, -0.16, 0.65, 0).show();
+  var psed = red
+     .ps('lomo')
+     .show();
+
+  download.onclick = function(){
+      psed.download('alloyimage的处理图像.jpg');
+  };
+};
+
+document.body.appendChild(img);
+</script>
+</body>
+</html>
