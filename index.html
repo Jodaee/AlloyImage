@@ -1,425 +1,397 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>AlloyImage by dorsywang</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">AlloyImage</h1>
-      <h2 class="project-tagline">an image processing lib based on html5</h2>
-      <a href="https://github.com/dorsywang/AlloyImage" class="btn">View on GitHub</a>
-      <a href="https://github.com/dorsywang/AlloyImage/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/dorsywang/AlloyImage/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
-
-    <section class="main-content">
-      <h3>
-<a id="welcome-to-alloyimage" class="anchor" href="#welcome-to-alloyimage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to AlloyImage.</h3>
-
-<p>AlloyImage（AI)是一个基于html5技术的JS图像处理库，集成了一些方便快捷的图像处理API，您可以将它引用到您的网页中，结合css3等技术，做出一些之前无法做到的优美效果，或者，提供一个用JS编写的在线图像处理工具等。</p>
-
-<h3>
-<a id="设计理念" class="anchor" href="#%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>设计理念</h3>
-
-<h4>
-<a id="简单代码做复杂事情----it-seems-like-so-simple" class="anchor" href="#%E7%AE%80%E5%8D%95%E4%BB%A3%E7%A0%81%E5%81%9A%E5%A4%8D%E6%9D%82%E4%BA%8B%E6%83%85----it-seems-like-so-simple" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>简单代码做复杂事情----It seems like so simple!</h4>
-
-<p>1.接口调用简单<br>
-2.提供进一步封装的组合效果方便调用<br>
-3.基于AI编写的alloyPhoto，完整展示AI的能力与接口，以及调用方法Demo展示，更易于学习<br></p>
-
-<h3>
-<a id="特点" class="anchor" href="#%E7%89%B9%E7%82%B9" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>特点</h3>
-
-<p>1.图层功能，提供图层的添加，删除，交换图层顺序等功能，且包含与PS相对应的17种图层混合模式<br>
-2.图像的基本调节功能，包括亮度、对比度，色相、饱和度、明度调节<br>
-3.多种滤镜功能，去色、反相、高斯模糊、锐化、浮雕效果、查找边缘、马赛克、腐蚀等<br>
-4.处理后文件的保存，处理完成之后，可以将文件输出为base64形式间接使用和保存<br>
-5.高级组合效果，如素描，lomo，复古，素描等复合效果
-如一个素描效果的实现</p>
-
-<pre><code>var img = new Image();
-img.src = "pic.jpg";
-img.onload = function(){
-      //素描效果
-      AlloyImage(this).act("灰度处理").add(//添加一个图层上去
-            AlloyImage(this).act("灰度处理").act("反色").act("高斯模糊",5) , "颜色减淡"  
-      ).act("锐化").show();
-};
-</code></pre>
-
-<h3>
-<a id="api参考" class="anchor" href="#api%E5%8F%82%E8%80%83" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API参考</h3>
-
-<h4>
-<a id="初始化一个alloyimage对象" class="anchor" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%80%E4%B8%AAalloyimage%E5%AF%B9%E8%B1%A1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>初始化一个AlloyImage对象<br>
-</h4>
-
-<h5>
-<a id="用img创建一个对象图层" class="anchor" href="#%E7%94%A8img%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E5%9B%BE%E5%B1%82" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>用img创建一个对象（图层）<br>
-</h5>
-
-<p>AlloyImage(img) 或  new AlloyImage(img)<br>
-img可以是new Image()创建的对象，也可以是DOM树中的image元素，但在创建AlloyImage对象前确保 img已经被onload成功，否则可能导致抛出异常</p>
-
-<pre><code>var img = document.getElementsByTagName("img")[0];
-img.onload = function(){
-     var AlloyImageObj = AlloyImage(this);
-};
-</code></pre>
-
-<h5>
-<a id="创建一个纯色或透明的对象图层" class="anchor" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%BA%AF%E8%89%B2%E6%88%96%E9%80%8F%E6%98%8E%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%9B%BE%E5%B1%82" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>创建一个纯色或透明的对象（图层）<br>
-</h5>
-
-<p>AlloyImageObj AlloyImage(Number width,Number height,String fillStyle)<br>
-其中，width是图层宽度，height是图层高度，fillStyle是填涂的颜色，可以是#233322型，也可以是rgb(23,23,23)，甚至可以是rgba(23,23,23,0),或"red"这样的字符串<br></p>
-
-<p>一个AlloyImage对象可以看做是一个图层，也可以看做是一个工作文件<br></p>
-
-<h4>
-<a id="act" class="anchor" href="#act" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>act</h4>
-
-<p>说明：对单个图层进行效果处理<br>
-语法：AlloyImageObj act(String method,Args arg,...)<br>
-其中 method有以下可选参数<br></p>
-
-<table>
-    <tr>
-       <td>参数</td>
-<td>     功能</td>
-<td>附加参数</td>
-<td>用法示例</td>
-    </tr>
-    <tr>
-        <td>亮度</td> <td>调节亮度与对比度 </td>
-<td>亮度，对比度</td>
-<td>act("亮度",10,20)</td>
-    </tr>
-    <tr>
-        <td>色相/饱和度调节 </td> <td> 调节图像色相与饱和度  </td> <td>  色相，饱和度，明度，是否着色模式(可选) </td> <td>   act("色相/饱和度调节",10,0,10,true)</td>
-   </tr>
- <tr>
-        <td>曲线</td> <td> 调节灰度曲线  </td> <td>  节点x的坐标数组，节点y的坐标数组 </td> <td>   act("曲线",[0,65,128,255], [0,120,220,255])</td>
-   </tr>
-
-   <tr>
-        <td>灰度处理</td> <td>将图像处理为灰度图像 </td>
-<td>无</td>
-<td>act("灰度处理")</td>
-    </tr>
-   <tr>
-        <td>灰度阈值</td> <td>将图像二值化 </td>
-<td>阈值</td>
-<td>act("灰度阈值",128)</td>
-    </tr>
-
-   <tr>
-        <td>反色</td> <td>将图像进行反相操作 </td>
-<td>无</td>
-<td>act("反色")</td>
-    </tr>
-   <tr>
-        <td>高斯模糊</td> <td>将图像进行高斯模糊 </td>
-<td>模糊大小</td>
-<td>act("高斯模糊",10)</td>
-    </tr>
-   <tr>
-        <td>锐化</td> <td>将图像进行锐化 </td>
-<td>锐化大小</td>
-<td>act("锐化",10)</td>
-    </tr>
-   <tr>
-        <td>马赛克</td> <td>将图像进行马赛克处理 </td>
-<td>马赛克大小</td>
-<td>act("马赛克",10)</td>
-    </tr>
-   <tr>
-        <td>浮雕效果</td> <td>将图像进行浮雕效果处理 </td>
-<td>无</td>
-<td>act("浮雕效果")</td>
-    </tr>
-   <tr>
-        <td>腐蚀</td> <td>将图像进行腐蚀效果处理 </td>
-<td>无</td>
-<td>act("腐蚀")</td>
-    </tr>
-<tr>
-        <td>添加杂色</td> <td>在图像上添加杂色 </td>
-<td>杂色数量</td>
-<td>act("添加杂色",10)</td>
-    </tr>
-
-</table>
-
-<h4>
-<a id="add" class="anchor" href="#add" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>add</h4>
-
-<p>说明：合并一个图层到本图层上去<br>
-语法：AlloyImageObj add(AlloyImageObj new[,String model [,Number dx,Number dy,String alpha,String channel]])<br>
-本方法将会进行图层合并操作，会将新图层new以高于本图层的顺序，以model的混合模式，以相对本图层左上角为坐标原点的dx,dy偏移量合并到本图层，并返回合并后的图层对象<br>
-参数说明：第一个参数为必须参数，其他全部为可选参数，并且除了第一个必须要是图层对象外，其他参数位置全部可以随意调（alloyPhoto很多api参数很灵活)<br>
-model的模式有17种，其效果和Photoshop中效果对应<br>
-"正常","颜色减淡","变暗","变亮","正片叠底","滤色","叠加","强光","差值","排除","点光","颜色加深","线性加深","线性减淡","柔光","亮光","线性光","实色混合" <br>
-alpha代表透明度，要求为Sring类型，并且需要带%号，比如"20%","0%","100%"（可以不写，默认值)<br>
-dx,dy分别为Number类型<br>
-channel为混合通道，表示以哪些通道混合，比如"RB"，代表混合R、B通道<br></p>
-
-<p>用例：</p>
-
-<p>下面的例子表示m2图层反色处理后，和m图层以正常（可以不写）的混合模式，20%的透明度，只混合B通道的选项进行合并操作</p>
-
-<pre><code>//...some code here
-m.add(
-   m2.act("反色") , "正常","20%","B"
-).replace(this);
-</code></pre>
-
-<h4>
-<a id="show" class="anchor" href="#show" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>show</h4>
-
-<p>说明：将当前图层以canvas元素显示出来
-语法：AlloyImageObj show([String cssSelector[,Boolean isFast]])<br>
-设定了cssSelector之后，将会在cssSelector元素内追加canvas元素显示图层，如果没有cssSelector，将会在文档后追加canvas元素显示图层，isFast是快速显示标记，如果设定isFast为true，则图像将会以快速模式显示出来，可用于中间处理过程（图像品质降低)<br></p>
-
-<h4>
-<a id="replace" class="anchor" href="#replace" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>replace</h4>
-
-<p>说明：将本图像替换image显示
-语法：AlloyImageObj replace(Image img)<br>
-使用该方法后，img将会被本图像代替<br></p>
-
-<pre><code>var img = document.getElementsByTagName("img")[0];
-img.loadOnce(function(){//loadOnce添加为alloyPhoto添加
-      /*
-         防止用onload事件注册后  replace会改变img的src导致onload事件再次触发形成循环
-      */
-      var ps = AlloyImage(this);
-      ps.act("反色").replace(this);
-});
-</code></pre>
-
-<h4>
-<a id="clone" class="anchor" href="#clone" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>clone</h4>
-
-<p>说明：复制图层对象<br>
-语法：AlloyImageObj clone()<br>
-使用该方法后，将会返回一个图层副本。我们都知道，基于js对象都是引用传递，所以，此方法构造一个与原图层无关的图层副本<br>
-如 var layer2 = layer.clone();</p>
-
-<h4>
-<a id="view" class="anchor" href="#view" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>view</h4>
-
-<p>说明：预览模式下处理<br>
-语法：AlloyImageObj view(String method,Args arg,...)<br>
-此方法和act很相似，但此方法可以记录view之前的状态，配合excute和cancel使用来执行或取消处理</p>
-
-<h4>
-<a id="excute" class="anchor" href="#excute" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>excute</h4>
-
-<p>说明：执行预览模式下的操作<br>
-语法：AlloyImageObj excute()</p>
-
-<h4>
-<a id="cancel" class="anchor" href="#cancel" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>cancel</h4>
-
-<p>说明：取消预览模式下所做的处理<br>
-语法：AlloyImageObj cancel()</p>
-
-<h3>
-<a id="多图层操作" class="anchor" href="#%E5%A4%9A%E5%9B%BE%E5%B1%82%E6%93%8D%E4%BD%9C" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>多图层操作</h3>
-
-<h4>
-<a id="addlayer" class="anchor" href="#addlayer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>addLayer</h4>
-
-<p>说明：添加一个图层到本图层上去，不进行合并操作，不会对本图层产生影响<br>
-语法：AlloyImageObj addLayer(AlloyImageObj new[,String model [,Number dx,Number dy]])<br>
-addLayer方法与add的方法不同出在于，add方法会将new图层合并到本图层去，返回一个合并后的图层，addLayer方法会将一个图层挂载到本图层，返回的对象为一个复合的图层，不会本图层和new图层，但对new 图层的后续处理会影响复合图层的显示，add方法则不会<br></p>
-
-<h4>
-<a id="swap" class="anchor" href="#swap" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>swap</h4>
-
-<p>说明：交换两个图层的顺序<br>
-语法：AlloyImageObj swap(Number indexA,Number indexB)<br>
-indexA、indexB分别表示图层顺序所代表的图层，使用该方法后，将会改变两图层的顺序</p>
-
-<h4>
-<a id="deletelayers" class="anchor" href="#deletelayers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>deleteLayers</h4>
-
-<p>说明：删除一个或多个图层<br>
-语法：AlloyImageObj deleteLayers(Array indexArr)<br>
-删除图层顺序为indexArr数组中的图层</p>
-
-<h3>
-<a id="复合效果" class="anchor" href="#%E5%A4%8D%E5%90%88%E6%95%88%E6%9E%9C" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>复合效果</h3>
-
-<h4>
-<a id="ps" class="anchor" href="#ps" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ps</h4>
-
-<p>说明：调用一个组合动作构成的复合效果<br>
-语法：AlloyImageObj ps(String effect)<br>
-effect具体可选值如下</p>
-
-<table>
-   <tr>
-      <td>method值</td>
-<td>备注</td>
-    </tr>
-<tr>
-<td>美肤</td>
-<td>美化肤色</td>
-</tr>
-<tr>
-<td>素描</td>
-<td>无</td>
-</tr>
-<tr>
-<td>自然增强</td>
-<td>使图片效果增强</td>
-</tr>
-<tr>
-<td>紫调</td>
-<td>无</td>
-</tr>
-<tr>
-<td>柔焦</td>
-<td>无</td>
-</tr>
-<tr>
-<td>复古</td>
-<td>无</td>
-</tr>
-<tr>
-<td>黑白</td>
-<td>无</td>
-</tr>
-<tr>
-<td>仿lomo</td>
-<td>无</td>
-</tr>
-<tr>
-<td>亮白增强</td>
-<td>无</td>
-</tr>
-<tr>
-<td>灰白</td>
-<td>无</td>
-</tr>
-<tr>
-<td>灰色</td>
-<td>无</td>
-</tr>
-<tr>
-<td>暖秋</td>
-<td>无</td>
-</tr>
-</table>
-
-<pre><code>var img = document.getElementsByTagName("img")[0];
-img.loadOnce(function(){//loadOnce添加为alloyPhoto添加
-      /*
-         防止用onload事件注册后  replace会改变img的src导致onload事件再次触发形成循环
-      */
-      var ai = AlloyImage(this);
-      ai.ps("自然增强").replace(this);
-});
-</code></pre>
-
-<h3>
-<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>demo</h3>
-
-<p>1.鼠标滑上变彩色，移开灰度</p>
-
-<pre><code>var pics = document.getElementsByTagName("img");
-
-for(var i = 0;i &lt; pics.length;i ++){
-  pics[i].loadOnce(function(){
-      /*
-         防止用onload事件注册后  replace会改变img的src导致onload事件再次触发形成循环
-      */
-
-      var picTranseObj = AlloyImage(this);//创建一个AlloyImage对象
-      var origin = picTranseObj.clone();//克隆原始对象做为副本
-
-      var grayPic = picTranseObj.act("灰度处理");//灰度后的图像
-      grayPic.replace(this);
-
-      this.onmouseover = function(){
-          origin.replace(this);//显示原始图像
-      };
-
-      this.onmouseout = function(){
-          grayPic.replace(this);//显示灰度图像
-      };
-
-  });
-}
-</code></pre>
-
-<p>2.lomo风格图像</p>
-
-<pre><code>var pics = document.getElementsByTagName("img");
-
-for(var i = 0;i &lt; pics.length;i ++){
-  pics[i].loadOnce(function(){
-      /*
-         防止用onload事件注册后  replace会改变img的src导致onload事件再次触发形成循环
-      */
-
-
-      var m = AlloyImage(this).add(
-        AlloyImage(this) , "滤色"
-      ).add(
-        AlloyImage(this) , "柔光"
-      );
-
-      var m2 = m.clone();
-
-      m.add(
-        m2.act("反色") , "正常","20%","B"
-      ).replace(this);
-
-
-
-  });
-}
-</code></pre>
-
-<p>3.复古风格</p>
-
-<pre><code>var pics = document.getElementsByTagName("img");
-
-for(var i = 0;i &lt; pics.length;i ++){
-  pics[i].loadOnce(function(){
-      /*
-         防止用onload事件注册后  replace会改变img的src导致onload事件再次触发形成循环
-      */
-      var m = AlloyImage(this).act("灰度处理").add(
-        AlloyImage(this.width,this.height,"#808080").act("添加杂色").act("高斯模糊",4).act("色相/饱和度调节",32,19,0,true),"叠加"
-      ).show();
-
-
-
-  });
-}
-</code></pre>
-
-<p>更多效果及API后续添加，敬请期待</p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/dorsywang/AlloyImage">AlloyImage</a> is maintained by <a href="https://github.com/dorsywang">dorsywang</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  <meta name="author" content="Tencent.AlloyTeam.Dorsywang" />
+  <meta name="copyright" content="Tencent.AlloyTeam" />
+  <meta name="keywords" content="alloyPhoto 简约版,alloyImage,alloyPhoto,html5 canvas,alloyTeam" />
+  <meta name="description" content="alloyPhoto，一款基于alloyImage库的图像处理应用,alloyImage是基于html5的图像处理js代码库。" />
+  
+	<title>AlloyImage</title>
+  <link media="all" rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+  <script type="text/javascript">
+(function(){
+  var donotShow = function(){
+    alert("建议使用IE10、chrome或firefox浏览器");
+    window.onload = function(){
+    };
+  };
+  var ieFlag = 0, chromeFlag = 0;
+  var sUserAgent = navigator.userAgent;  
+  var fAppVersion = parseFloat(navigator.appVersion);  
+  var isIE = sUserAgent.indexOf("compatible") > -1 && sUserAgent.indexOf("MSIE") > -1; 
+  var isFirefox = sUserAgent.toLowerCase().indexOf("firefox") > -1; 
+  
+  if(isIE){
+    var result = /MSIE (\d+\.\d+)/.exec(sUserAgent);
+    if(parseFloat(result[1]) > 9){
+      ieFlag = 1;
+    }else{
+    }
+  }
+
+  var chromeFlag = sUserAgent.indexOf("Chrome") > -1 ;  
+  if(ieFlag || chromeFlag || isFirefox){
+    
+  }else{
+    donotShow();
+  }
 
   
-  </body>
+  })();
+
+  </script>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <nav>
+      <a href="./" id="home">首页</a>
+      <a href="docs.html#mutiThread" target="_self" id="docs">文档<span style="color:red;position:relative;top:-5px;left:5px;font-size:12px;">New</span></a>
+      <a href="download/alloyImage-1.1.zip" target="_self" id="download">下载</a>
+    </nav>
+    <div class="hoverBorder" id="hoverBorder"></div>
+  </header>
+
+  <section class="content" style="margin-top:0;">
+    <article class="demo" style="width:100%;margin-bottom:30px;">
+      <section class="demoPics" style="width:100%;height:480px;">
+        <div class="flashWrapper" style="width:1003px;">
+          <div class="waitMsg" id="waitMsg">处理中</div>
+          <div class="flash" id="flash">
+            <img src="img/home/4.jpg" id="pic0" alt="" />
+            <img src="img/home/scen.jpg" id="pic2" alt="" />
+            <img src="img/home/pet.jpg" id="pic2" alt="" />
+            <img src="img/home/inner.jpg" id="pic1" alt="" />
+            <img src="img/home/big.jpg" id="pic2" alt="" />
+            <img src="img/home/stop.jpg" id="pic4" alt="" />
+          </div>
+        </div>
+        <div class="title" id="demoTitle">加载图片中...</div>
+        <div class="picNav" id="picNav">
+          <a href="javascript:;" class="curr">.</a>
+          <a href="javascript:;">.</a>
+          <a href="javascript:;">.</a>
+          <a href="javascript:;">.</a>
+          <a href="javascript:;">.</a>
+          <a href="javascript:;">.</a>
+        </div>
+
+      </section>
+    </article>
+
+   <aside class="links">
+      <h1>Links</h1>
+      <div class="linksWrapper">
+        <a href="http://www.alloyteam.com" target="_blank">AlloyTeam</a><br />
+        <a href="fractal.html" target="_blank">Mandelbrot分形</a><br />
+        <a href="test.html" target="_blank">多线程测试</a><br />
+        <a href="http://alloyteam.github.io/AlloyDesigner/" target="_blank">AlloyDesigner<span style="color:red;position:relative;top:-5px;left:5px;font-size:12px;">New</span></a><br />
+        <br />
+        <a href="http://wp.qq.com/wpa/qunwpa?idkey=a38613ed0dfb7256f40908530ab106b85da7785cc564389a0662abd5e0cc5277" target="_blank">QQ群: 300197791</a>
+        <a target="_blank" href="http://wp.qq.com/wpa/qunwpa?idkey=a38613ed0dfb7256f40908530ab106b85da7785cc564389a0662abd5e0cc5277"><img border="0" src="http://wp.qq.com/images/group.png" alt="点击这里加入此群" title="点击这里加入此群"></a>
+      </div>
+    </aside>
+
+    <section class="introWrapper">
+      <h1>Start</h1>
+      <section class="demoPics">
+        <a href="alloyphoto.html" id="linkSimple" target="_blank"></a>
+        <a href="alloyphotopro.html" id="linkPro" target="_blank"></a>
+        <a href="https://github.com/AlloyTeam/AlloyImage" target="_blank" id="linkGit"></a>
+        <ul class="apintro">
+          <li style="margin-left:0;">
+            <h2>AlloyImage</h2>
+            <ul>
+              <li>
+                基于html5的JS图片图像处理库
+              </li>
+              <li>
+                简单快捷的API
+              </li>
+              <li>
+                多图层操作
+              </li>
+              <li>
+                与PS对应的17种图层混合模式
+              </li>
+              <li>
+                多种基本滤镜处理效果
+              </li>
+              <li>
+                多种组合风格效果 
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <h2>AlloyPhoto</h2>
+            <ul>
+              <li>
+                基于AlloyImage的Web应用
+              </li>
+              <li>
+                简约版和专业版
+              </li>
+              <li>
+                AlloyImage能力展示
+              </li>
+              <li>
+                AlloyImage的强势Demo
+              </li>
+              <li>
+                方便快捷图片在线图像处理
+              </li>
+              <li>
+                保存图片到本地
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <h2>SourceCode</h2>
+            <ul>
+              <li>
+                清晰的架构体系
+              </li>
+              <li>
+                方便扩展的插件系统
+              </li>
+              <li>
+                开放的数学处理模块
+              </li>
+              <li>
+                灵活的Public API方法重载
+              </li>
+              <li>
+                单例化主处理对象,节省内存
+              </li>
+              <li>
+                中英文友好参数映射支持
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </section>
+    </section>
+
+ 
+  </section>
+
+  <footer>
+    <section class="footerNav" style="display:none;">
+    <a href="http://www.alloyteam.com" target="_blank">AlloyTeam</a> | <a href="http://www.dorsywang.com" target="_blank">Blog</a>
+    </section>
+    <section class="copyright">
+    Copyright ©  2013 <a href="http://www.alloyteam.com" target="_blank">Tencent AlloyTeam.</a> All Rights Reserved. <br /><a target="_blank" style="text-decoration:none;" href="view-source:http://alloyteam.github.com/AlloyPhoto/"><span style="font-size:12px;color:#b7b4b4;">codeIn HTML5</span></a>
+    </section>
+  </footer>
+  <script type="text/javascript" src="js/combined/alloyimage.js"></script>
+  <script type="text/javascript">
+(function(){
+    var WIDTH = 1003,
+        HEIGHT = 432,
+        NUM = 6;
+        TITLE = [
+          "warmAutumn",
+          "soften",
+          "lomo",
+          "sketch",
+          "softenFace",
+          "vintage"
+        ];
+
+    var COMCODE = [
+    'var m = this.clone().act("色相/饱和度调节",36,47,8,true);<br />return this.add(<br />m, "叠加"<br />);',
+    'var m = this.clone().act("色相/饱和度调节",36,47,8,true);<br />return this.add(<br />m, "叠加"<br />);',
+    'var m = this.clone().act("色相/饱和度调节",36,47,8,true);<br />return this.add(<br />m, "叠加"<br />);',
+    'var m = this.clone().act("色相/饱和度调节",36,47,8,true);<br />return this.add(<br />m, "叠加"<br />);',
+    'var m = this.clone().act("色相/饱和度调节",36,47,8,true);<br />return this.add(<br />m, "叠加"<br />);'
+    ];
+
+    var Tools = {
+      each: function(els, func){
+        for(var i = 0, n = els.length; i < n; i ++){
+          func.call(els[i], i);
+        }
+      },
+
+      addClass: function(el, className){
+        if(el.className.match(className)){
+        }else{
+          el.className += " " + className;
+        }
+      },
+
+      removeClass: function(el, className){
+        el.className = el.className.replace(new RegExp(" ?" + className), "");
+      }
+    };
+
+    var Flash = {
+      el: null,//元素
+      curr: 0,
+
+      init: function(){
+        this.el = document.getElementById("flash");
+        this.curr = 0;
+        this.doCache();
+        this.start();
+        this.eventAtt();
+      },
+
+      start: function(){
+        var _this = this;
+        clearInterval(this.timer);
+        this.timer = setInterval(move,3000);
+
+        function move(){
+            _this.curr ++;
+            _this.curr %= NUM;
+
+            _this.moveTo(_this.curr);
+        }
+
+      },
+
+      moveTo: function(i){
+        this.el.style.left = -(i * WIDTH) + "px";
+        this.showInfo(i);
+      },
+
+      showInfo: function(i){
+          var as = document.getElementById("picNav").getElementsByTagName("a");
+          Tools.each(as, function(){
+              Tools.removeClass(this, "curr");
+          });
+
+          Tools.addClass(as[i], "curr");
+          var demoTitle = document.getElementById("demoTitle");
+          demoTitle.innerHTML = "<span class='code'>AlloyImage(img).ps(\"" + TITLE[i] + "\").replace(img);</span> 　　<div class='button'><a href='javascript:;' id='runCode' class='mask'>运行代码</a></div> <div class='button'><a href='javascript:;' class='mask' id='undo'>撤回原图</a></div> ";
+      },
+
+      stop: function(){
+        clearInterval(this.timer);
+      },
+
+      eventAtt: function(){
+          var as = document.getElementById("picNav").getElementsByTagName("a");
+          var _this = this, timer;
+          Tools.each(as, function(i){
+              this.onclick = function(){
+                return function(){
+                  _this.stop();
+                  _this.moveTo(i);
+                  _this.curr = i;
+
+                  clearTimeout(timer);
+                  timer = setTimeout(function(){
+                      _this.start();
+                  }, 2000);
+                };
+              }();
+          });
+
+          var imgs = document.getElementById("flash").getElementsByTagName("img");
+          Tools.each(imgs, function(i){
+              this.onmouseover = function(){
+                return function(){
+                  _this.stop();
+                };
+              }();
+
+              this.onmouseout = function(){
+                return function(){
+                   _this.start();
+                };
+              }();
+          });
+
+          var demoTitle = document.getElementById("demoTitle");
+          demoTitle.onmouseover = function(){
+            _this.stop();
+          };
+
+          demoTitle.onmouseout = function(){
+            _this.start();
+          };
+
+          var waitMsg = document.getElementById("waitMsg");
+          demoTitle.onclick = function(e){
+            var that = this;
+            if(e.target.id == "runCode"){
+
+              setTimeout(function(){
+                AlloyImage(imgs[_this.curr]).ps(TITLE[_this.curr]).replace(imgs[_this.curr]);
+                waitMsg.style.display = "none";
+              }, 2);
+
+              waitMsg.style.display = "block";
+              
+
+            }else if(e.target.id == "undo"){
+              _this.cache[_this.curr].old.replace(imgs[_this.curr]);
+            }else if(e.target.id == "viewRaw"){
+            }
+          };
+
+      },
+
+      doCache: function(){//预处理
+         var _this = this,
+         img = document.getElementById("flash").getElementsByTagName("img");
+         _this.cache =[];
+
+          Tools.each(TITLE, function(i){
+              _this.cache[i] = {
+                old: AlloyImage(img[i]),
+              };
+          });
+     }
+    };
+    window.onload = function(){
+      Flash.init();
+    };
+
+    var as = document.getElementById("docs");
+    var border = document.getElementById("hoverBorder");
+      as.onmouseover = function(){
+        border.style.left = "119px";
+      };
+
+      as.onmouseout = function(){
+        border.style.left = "0px";
+      };
+
+    var download = document.getElementById("download");
+    var border = document.getElementById("hoverBorder");
+      download.onmouseover = function(){
+        border.style.left = "235px";
+      };
+
+      download.onmouseout = function(){
+        border.style.left = "0px";
+      };
+
+ })();
+</script>
+
+<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-23019343-9']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+</script>
+
+</div>
+</body>
 </html>
