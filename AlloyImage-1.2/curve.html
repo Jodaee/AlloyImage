@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+<h1>
+</h1>
+<script type="text/javascript" src="alloyimage/alloyimage.1.2.js"></script>	
+<script type="text/javascript">
+$AI.useWorker("alloyimage/alloyimage.1.2.js");
+
+var img = new Image();
+img.src = "img/3.jpg";
+img.onload = function(){
+  var red = $AI(this);
+
+  //red.act("可选颜色", "青色", -0.53, -0.86, -0.16, 0.65, 0).show();
+  red
+     //.act("可选颜色", "黑色", -0.04, 0.05, -0.01, 0, 1)
+     .act("曲线", [0, 40, 255], [0, 20, 200], "R")
+     .act("曲线", [0, 128, 255], [40, 128, 220], "G")
+     .act("曲线", [0, 128, 255], [40, 128, 200], "B")
+     .show();
+};
+
+document.body.appendChild(img);
+</script>
+</body>
+</html>

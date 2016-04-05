@@ -1,0 +1,6 @@
+AlloyImage
+感谢您下载AlloyImage, AlloyImage为作者业余时间开发，旨在为业界提供一下便利的图像处理库
+
+Author: dorsywang@AlloyTeam
+HomePage: http://www.dorsywang.com
+Follow in Github: https://github.com/dorsywang

@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+<img src="img/10.jpg" alt="" id="pic" />	
+主色系是<div id="colorRect" style="display: inline-block;width: 50px; height: 50px;"></div>
+
+<img src="img/53.jpg" alt="" id="pic2" />	
+主色系是<div id="colorRect2" style="display: inline-block;width: 50px; height: 50px;"></div>
+
+
+
+<script type="text/javascript" src="alloyimage/alloyimage.1.2.js"></script>
+<script type="text/javascript">
+window.onload = function(){
+  var pic = document.getElementById('pic');
+  var colorRect = document.getElementById('colorRect');
+
+  var color = $AI(pic).Tools.getColor();
+
+  console.log(color);
+  colorRect.style.background = color;
+
+  var pic = document.getElementById('pic2');
+  var colorRect = document.getElementById('colorRect2');
+
+  var color = $AI(pic).Tools.getColor();
+
+  console.log(color);
+  colorRect.style.background = color;
+};
+</script>
+</body>
+</html>
